@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Health News</h2>
+    <div class="alert alert-success mb-4">{{ news | safe }}</div>
+    <form method="post" class="d-flex justify-content-center mb-4">
+        <input type="text" name="submit_news" class="form-control form-control-custom me-2"
+            placeholder="Submit your health news">
+        <button type="submit" class="btn btn-custom">Submit News <i class="fas fa-newspaper"></i></button>
+    </form>
+    <div id="news-result" class="text-center"></div>
+</div>
+{% block scripts %}
+<script>
+    const form = document.querySelector('form');
+    const resultDiv = document.getElementById('news-result');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitNews = document.querySelector('input[name="submit_news"]').value;
+        const response = await fetch('/news', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `submit_news=${encodeURIComponent(submitNews)}`
+        });
+        const data = await response.json();
+        resultDiv.innerHTML = `<div class="alert alert-success fade-in">${data.news.replace(/\n/g, '<br>')}</div>`;
+    });
+</script>
+{% endblock %}
+{% endblock %}

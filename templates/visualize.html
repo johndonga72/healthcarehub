@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Visualize Knowledge</h2>
+    <form method="post" class="d-flex justify-content-center mb-4">
+        <input type="text" name="query" class="form-control form-control-custom me-2"
+            placeholder="Enter a healthcare term (e.g., Diabetes)">
+        <button type="submit" class="btn btn-custom">Update Graph <i class="fas fa-chart-line"></i></button>
+    </form>
+    <div class="text-center"><img src="{{ url_for('visualize') }}" alt="Knowledge Graph" id="graph-image"
+            class="img-fluid"></div>
+</div>
+{% endblock %}

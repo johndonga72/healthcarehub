@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Symptom Checker</h2>
+    <form id="symptom-form" class="d-flex justify-content-center mb-4">
+        <input type="text" name="symptoms" class="form-control me-2" placeholder="Enter symptoms (e.g., fever, cough)">
+        <button type="submit" class="btn btn-primary">Check Symptoms</button>
+    </form>
+    <div id="symptom-result" class="text-center"></div>
+</div>
+{% block scripts %}
+<script>
+    document.getElementById('symptom-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const symptoms = document.querySelector('input[name="symptoms"]').value.trim();
+        const resultDiv = document.getElementById('symptom-result');
+        if (!symptoms) {
+            resultDiv.innerHTML = '<p class="text-danger">Please enter symptoms</p>';
+            return;
+        }
+        resultDiv.innerHTML = '<p>Analyzing...</p>';
+        try {
+            const response = await fetch('/symptoms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `symptoms=${encodeURIComponent(symptoms)}`
+            });
+            const data = await response.json();
+            resultDiv.innerHTML = `<div class="alert alert-info">${data.result.replace(/\n/g, '<br>')}</div>`;
+        } catch (error) {
+            resultDiv.innerHTML = '<p class="text-danger">Error processing symptoms</p>';
+            console.error('Error:', error);
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

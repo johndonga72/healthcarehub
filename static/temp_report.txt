@@ -1,0 +1,9 @@
+Health Report
+Generated on: 2025-04-07 23:03:03.149656
+
+User Input: fever
+Age: 18
+Body Weight: 14 kg
+Height: 170 cm
+Gender: Male
+Family Health Details: diabetes

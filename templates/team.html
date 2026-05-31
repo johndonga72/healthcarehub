@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center fw-bold fade-in" style="font-family: 'Poppins', sans-serif;">Our Team</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card fade-in" style="transition: transform 0.3s ease;">
+                <img src="team-member.jpg" class="card-img-top" alt="Team Member">
+                <div class="card-body">
+                    <h5 class="card-title">Dr. John Doe</h5>
+                    <p class="card-text">Chief Medical Officer</p>
+                </div>
+            </div>
+        </div>
+        <!-- Add more team members -->
+    </div>
+</div>
+<style>
+    .card:hover {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}

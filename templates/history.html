@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User History</title>
+</head>
+
+<body>
+    <h1>User History</h1>
+    <table border="1">
+        <tr>
+            <th>Timestamp</th>
+            <th>User Input</th>
+            <th>Age</th>
+            <th>Weight</th>
+            <th>Height</th>
+            <th>Gender</th>
+            <th>Symptoms</th>
+            <th>BMI</th>
+            <th>Chat Message</th>
+        </tr>
+        {% for row in user_data %}
+        <tr>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[8] }}</td>
+            <td>{{ row[12] }}</td>
+            <td>{{ row[13] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('home') }}">Back to Home</a> | <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+
+</html>

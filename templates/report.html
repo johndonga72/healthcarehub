@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center fw-bold">Generate Health Report</h2>
+    <form method="POST" class="mt-4">
+        <div class="mb-3">
+            <label for="input" class="form-label">Additional Details (Optional)</label>
+            <input type="text" class="form-control" id="input" name="input" placeholder="e.g., Symptoms or Notes">
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" class="form-control" id="age" name="age" required>
+        </div>
+        <div class="mb-3">
+            <label for="body_weight" class="form-label">Body Weight (kg)</label>
+            <input type="number" step="0.1" class="form-control" id="body_weight" name="body_weight" required>
+        </div>
+        <div class="mb-3">
+            <label for="height" class="form-label">Height (cm)</label>
+            <input type="number" step="0.1" class="form-control" id="height" name="height" required>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select class="form-control" id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="family_health_details" class="form-label">Family Health Details</label>
+            <textarea class="form-control" id="family_health_details" name="family_health_details" rows="3"
+                placeholder="e.g., Diabetes, Hypertension in family"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="symptoms" class="form-label">Symptoms</label>
+            <textarea class="form-control" id="symptoms" name="symptoms" rows="3"
+                placeholder="e.g., Fever, Cough, Fatigue"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="lifestyle" class="form-label">Lifestyle</label>
+            <textarea class="form-control" id="lifestyle" name="lifestyle" rows="3"
+                placeholder="e.g., Sedentary, Active, Diet"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="medical_history" class="form-label">Medical History</label>
+            <textarea class="form-control" id="medical_history" name="medical_history" rows="3"
+                placeholder="e.g., Asthma, Surgery"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="allergies" class="form-label">Allergies</label>
+            <textarea class="form-control" id="allergies" name="allergies" rows="3"
+                placeholder="e.g., Pollen, Penicillin"></textarea>
+        </div>
+        <button type="submit" class="btn btn-custom">Generate Report</button>
+    </form>
+</div>
+{% endblock %}

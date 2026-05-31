@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Health Videos</h2>
+    <form id="video-form" class="d-flex justify-content-center mb-4">
+        <input type="text" name="query" class="form-control me-2"
+            placeholder="Enter a healthcare topic (e.g., Diabetes)">
+        <button type="submit" class="btn btn-primary">Search Videos</button>
+    </form>
+    <div id="video-container" class="text-center"></div>
+</div>
+{% block scripts %}
+<script>
+    document.getElementById('video-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const query = document.querySelector('input[name="query"]').value.trim();
+        const videoContainer = document.getElementById('video-container');
+        if (!query) {
+            videoContainer.innerHTML = '<p class="text-danger">Please enter a topic</p>';
+            return;
+        }
+        videoContainer.innerHTML = '<p>Loading...</p>';
+        try {
+            const response = await fetch('/videos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `query=${encodeURIComponent(query)}`
+            });
+            const data = await response.json();
+            if (data.video_url) {
+                videoContainer.innerHTML = `
+                    <iframe width="100%" height="315" src="${data.video_url}" frameborder="0" allowfullscreen></iframe>
+                    <p class="mt-2">${data.title || 'Video'}</p>
+                `;
+            } else {
+                videoContainer.innerHTML = '<p class="text-danger">No video found</p>';
+            }
+        } catch (error) {
+            videoContainer.innerHTML = '<p class="text-danger">Error loading video</p>';
+            console.error('Error:', error);
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

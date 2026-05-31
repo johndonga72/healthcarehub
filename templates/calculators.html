@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Health Calculators</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <h3>BMI Calculator</h3>
+                <form id="bmi-form" class="mt-3">
+                    <input type="text" name="weight" class="form-control mb-2" placeholder="Weight (kg)">
+                    <input type="text" name="height" class="form-control mb-2" placeholder="Height (cm)">
+                    <input type="hidden" name="action" value="bmi">
+                    <button type="submit" class="btn btn-primary">Calculate BMI</button>
+                </form>
+                <p id="bmi-result" class="mt-3">Enter data to calculate</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <h3>Body Fat Calculator</h3>
+                <form id="body-fat-form" class="mt-3">
+                    <input type="text" name="weight" class="form-control mb-2" placeholder="Weight (kg)">
+                    <input type="text" name="height" class="form-control mb-2" placeholder="Height (cm)">
+                    <input type="text" name="age" class="form-control mb-2" placeholder="Age">
+                    <select name="gender" class="form-control mb-2">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <input type="hidden" name="action" value="body_fat">
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </form>
+                <p id="body-fat-result" class="mt-3">Enter data to calculate</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <h3>Ideal Weight Calculator</h3>
+                <form id="ideal-weight-form" class="mt-3">
+                    <input type="text" name="height" class="form-control mb-2" placeholder="Height (cm)">
+                    <select name="gender" class="form-control mb-2">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <input type="hidden" name="action" value="ideal_weight">
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </form>
+                <p id="ideal-weight-result" class="mt-3">Enter data to calculate</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% block scripts %}
+<script>
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const action = formData.get('action');
+            const resultId = action === 'bmi' ? 'bmi-result' : action === 'body_fat' ? 'body-fat-result' : 'ideal-weight-result';
+            const resultElement = document.getElementById(resultId);
+            resultElement.textContent = 'Calculating...';
+            try {
+                const response = await fetch('/calculators', {
+                    method: 'POST',
+                    body: new URLSearchParams(formData)
+                });
+                const data = await response.json();
+                resultElement.textContent = data.result;
+            } catch (error) {
+                resultElement.textContent = 'Error calculating';
+                console.error('Error:', error);
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center py-5"
+    style="background: linear-gradient(135deg, #2c3e50, #3498db); color: #ecf0f1; position: relative; overflow: hidden;">
+    <h1 class="display-3 fw-bold text-shadow">Welcome to Healthcare Hub</h1>
+    <p class="lead mb-4 text-glow">Your premier destination for health and wellness solutions</p>
+    <div class="my-4 position-relative">
+        <!-- Updated to use url_for('chat') instead of url_for('chatbot') -->
+        <div class="search-bar-container" style="width: 400px; margin: 0 auto;">
+            <form action="{{ url_for('chat') }}" method="get">
+                <input type="text" class="search-bar" placeholder="Ask the HHH Chatbot..." />
+            </form>
+        </div>
+        <div class="glow-effect"></div> <!-- Glowing effect behind search bar -->
+    </div>
+</div>
+<div class="container my-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+        <div class="col">
+            <div class="card p-4 text-center h-100 card-hover"
+                style="background: #ffffff; border: none; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                <div class="card-icon mb-3"><i class="fas fa-stethoscope" style="font-size: 2.5em; color: #3498db;"></i>
+                </div>
+                <h5 class="card-title text-primary">Symptom Checker</h5>
+                <p class="card-text">Analyze your symptoms with AI.</p>
+                <a href="{{ url_for('symptoms') }}" class="btn btn-custom btn-raised">Go to Symptom Checker</a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card p-4 text-center h-100 card-hover"
+                style="background: #ffffff; border: none; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                <div class="card-icon mb-3"><i class="fas fa-video" style="font-size: 2.5em; color: #3498db;"></i></div>
+                <h5 class="card-title text-primary">Health Videos</h5>
+                <p class="card-text">Watch educational content.</p>
+                <a href="{{ url_for('videos') }}" class="btn btn-custom btn-raised">Go to Health Videos</a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card p-4 text-center h-100 card-hover"
+                style="background: #ffffff; border: none; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                <div class="card-icon mb-3"><i class="fas fa-pills" style="font-size: 2.5em; color: #3498db;"></i></div>
+                <h5 class="card-title text-primary">Medicine Finder</h5>
+                <p class="card-text">Find medicines near you.</p>
+                <a href="{{ url_for('medicine') }}" class="btn btn-custom btn-raised">Go to Medicine Finder</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Enhanced Styling */
+    .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .text-glow {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    .glow-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, rgba(52, 152, 219, 0.3) 0%, transparent 70%);
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+        from {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        to {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+    }
+
+    .card-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-icon {
+        background: linear-gradient(45deg, #3498db, #2c3e50);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-custom {
+        background: linear-gradient(45deg, #3498db, #2c3e50);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-raised {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(45deg, #2c3e50, #3498db);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Ensure cards are evenly spaced and aligned */
+    .row-cols-md-3>.col {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Stylish Search Bar */
+    .search-bar-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1em;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        color: #fff;
+        outline: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .search-bar::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .search-bar:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-bar:focus {
+        background: linear-gradient(45deg, #45b7d1, #4ecdc4, #ff6b6b);
+        box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+    }
+
+    .search-bar:active {
+        transform: scale(0.95);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<!-- Removed Three.js script and related code -->
+<script>
+    // Redirect to chat page on search bar click
+    document.querySelector('.search-bar').addEventListener('click', function () {
+        window.location.href = "{{ url_for('chat') }}";
+    });
+</script>
+{% endblock %}

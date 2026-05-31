@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Medicine Finder</h2>
+    <form id="medicine-form" class="d-flex justify-content-center flex-column align-items-center mb-4">
+        <input type="text" name="medicine_text" class="form-control mb-2"
+            placeholder="Enter medicine (e.g., paracetamol)">
+        <input type="text" name="location" class="form-control mb-2" placeholder="Enter location (e.g., Eluru)">
+        <button type="submit" class="btn btn-primary">Check Availability</button>
+    </form>
+    <div id="medicine-result" class="text-center"></div>
+</div>
+{% block scripts %}
+<script>
+    document.getElementById('medicine-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const medicine = document.querySelector('input[name="medicine_text"]').value.trim();
+        const location = document.querySelector('input[name="location"]').value.trim();
+        const resultDiv = document.getElementById('medicine-result');
+        if (!medicine || !location) {
+            resultDiv.innerHTML = '<p class="text-danger">Please enter medicine and location</p>';
+            return;
+        }
+        resultDiv.innerHTML = '<p>Searching...</p>';
+        try {
+            const response = await fetch('/medicine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `medicine_text=${encodeURIComponent(medicine)}&location=${encodeURIComponent(location)}`
+            });
+            const data = await response.json();
+            let resultHtml = data.result.replace(/\n/g, '<br>');
+            resultHtml = resultHtml.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" class="text-primary">$1</a>');
+            resultDiv.innerHTML = `<div class="alert alert-success">${resultHtml}</div>`;
+        } catch (error) {
+            resultDiv.innerHTML = '<p class="text-danger">Error fetching data</p>';
+            console.error('Error:', error);
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
