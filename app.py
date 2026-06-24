@@ -17,15 +17,34 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request, jsonify, send_file
-
+from dotenv import load_dotenv
+from flask_migrate import Migrate
+from models import db, Appointment
+from flask import request, jsonify
+from datetime import datetime
+load_dotenv()
 # Setup Flask
 app = Flask(__name__)
-
+database_url = os.getenv("DATABASE_URL")
+# Render sometimes provides postgres://
+if not database_url:
+    raise ValueError("DATABASE_URL environment variable is not set.")
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace(
+        "postgres://",
+        "postgresql://",
+        1
+    )
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# Initialize extensions
+db.init_app(app)
+migrate = Migrate(app, db)
 # Setup Groq API (replace with your actual key)
 client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
-
+print(os.getenv("GROQ_API_KEY"))
 # Setup YouTube API (replace with your actual key)
 youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=os.getenv("YOUTUBE_API_KEY"))
 
@@ -781,6 +800,58 @@ def news():
         return jsonify({'news': news})
     news = fetch_health_news()
     return render_template('news.html', news=news)
+@app.route("/appointments", methods=["POST"])
+def create_appointment():
+    try:
+        data = request.get_json()
+
+        customer_name = data.get("customer_name")
+        phone_number = data.get("phone_number")
+        appointment_time = data.get("appointment_time")
+
+        # Basic validation
+        if not all([customer_name, phone_number, appointment_time]):
+            return jsonify({
+                "success": False,
+                "message": "All fields are required."
+            }), 400
+
+        # Convert string to datetime object
+        appointment_datetime = datetime.strptime(
+            appointment_time,
+            "%Y-%m-%d %H:%M"
+        )
+
+        # Create appointment
+        appointment = Appointment(
+            customer_name=customer_name,
+            phone_number=phone_number,
+            appointment_time=appointment_datetime
+        )
+
+        # Save to database
+        db.session.add(appointment)
+        db.session.commit()
+
+        return jsonify({
+            "success": True,
+            "message": "Appointment created successfully.",
+            "appointment": appointment.to_dict()
+        }), 201
+
+    except ValueError:
+        return jsonify({
+            "success": False,
+            "message": "Invalid date format. Use YYYY-MM-DD HH:MM"
+        }), 400
+
+    except Exception as e:
+        db.session.rollback()
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
